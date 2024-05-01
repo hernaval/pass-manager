@@ -21,7 +21,7 @@ func Encrypt(key []byte, password []byte) []byte {
 	if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
 		fmt.Printf("Nonce error : %s", err)
 	}
-	cipherText := gcm.Seal(nonce, nonce, []byte(password), nil)
+	cipherText := gcm.Seal(nil, nonce, []byte(password), nil)
 
 	return cipherText
 }
