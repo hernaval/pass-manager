@@ -24,6 +24,7 @@ func main() {
 	}
 	fmt.Printf("Encrypted password : %s\n", string(cipherText))
 
+	// write to file as database
 	utils.Write("pass.txt", cipherText)
 
 	//decrypt the ciphertext along with the key
