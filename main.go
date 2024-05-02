@@ -3,18 +3,38 @@ package main
 import (
 	"fmt"
 	"pass-manager/pass-manager/encrypt"
+	"pass-manager/pass-manager/utils"
 )
 
 func main() {
-	key := []byte("mysecuredkeymysecuredkeymysecure")
-	masterPassword := []byte("mymasterpass")
-	cipher := encrypt.Encrypt(key, masterPassword)
-	fmt.Println("encrypted ", string(cipher[:]))
-
 	//create a master password
+	masterPassword := []byte("adminadmin")
 
-	//create devired key for the password
+	//create devired key for the master password
+	key, err := encrypt.HashPassword(string(masterPassword))
+	if err != nil {
+		fmt.Printf("Error hashing password : %s", err)
+	}
 
-	//give the password to encrypt
+	//encrypt the plaintext password along with the key
+	password := []byte("password123we")
+	cipherText, err := encrypt.Encrypt(key, password)
+	if err != nil {
+		fmt.Printf("Error encrypting plaintext : %s", err)
+	}
+	fmt.Printf("Encrypted password : %s\n", string(cipherText))
+
+	utils.Write("pass.txt", cipherText)
+
+	//decrypt the ciphertext along with the key
+	cf, err := utils.Read("pass.txt")
+	if err != nil {
+		fmt.Printf("Error reading file")
+	}
+	plaintext, err := encrypt.Decrypt(cf, key)
+	if err != nil {
+		fmt.Printf("Error decrypting  : %s\n", err)
+	}
+	fmt.Printf("Decrypted password : %s", plaintext)
 
 }
