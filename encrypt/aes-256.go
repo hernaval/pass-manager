@@ -11,15 +11,20 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-/**
-* Encrypts plaintext using AES and a given key
-* create a cipher block using the key provided
-* create a GCM instance (for encryption and authentication)
-* generate the nonce (number used once) for the operation
-* it prevents the risk of repeating the same cipher text
-* use the GCM to encrypt the password (plaintext) along with nonce
-* append the nonce to the return value to ensure same nonce will be used for decrypting
- */
+// ensuring the encription key is 32-bit size supported by aes256
+// convert it to byte slice
+func EncKey(key []byte) []byte {
+	sha := sha256.Sum256(key)
+	return sha[:]
+}
+
+// Encrypts plaintext using AES and a given key
+// create a cipher block using the key provided
+// create a GCM instance (for encryption and authentication)
+// generate the nonce (number used once) for the operation
+// it prevents the risk of repeating the same cipher text
+// use the GCM to encrypt the password (plaintext) along with nonce
+// append the nonce to the return value to ensure same nonce will be used for decrypting
 func Encrypt(key []byte, plaintext []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -38,25 +43,25 @@ func Encrypt(key []byte, plaintext []byte) ([]byte, error) {
 	return append(nonce, cipherText...), nil
 }
 
-/**
-* Hashes the master password
-* It's a KDF (Key Derivation Function)
-* convert the hashed value to a valid AES 32-bit key
- */
+// Hashes the master password
+// It's a KDF (Key Derivation Function)
+// convert the hashed value to a valid AES 32-bit key
 func HashPassword(password string) ([]byte, error) {
 	hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
 	}
-	hash := sha256.Sum256(hashed)
-	return hash[:], nil
+
+	return hashed, nil
 }
 
-/**
-* Decrypts the ciphtertext using key
-* The ciphertext contains nonce and the ciphertext itself
-* use GCM to decrypt the ciphertext using the extracted nonce
- */
+func VerifyPassword(hashed []byte, password string) error {
+	return bcrypt.CompareHashAndPassword(hashed, []byte(password))
+}
+
+// Decrypts the ciphtertext using key
+// The ciphertext contains nonce and the ciphertext itself
+// use GCM to decrypt the ciphertext using the extracted nonce
 func Decrypt(ciphertext []byte, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {

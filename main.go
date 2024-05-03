@@ -8,10 +8,11 @@ import (
 
 func main() {
 	//create a master password
-	masterPassword := []byte("adminadmin")
+	masterPassword := "adminadmin"
 
-	//create devired key for the master password
-	key, err := encrypt.HashPassword(string(masterPassword))
+	//create hashed key for the master password
+	key, err := encrypt.HashPassword(masterPassword)
+	key = encrypt.EncKey(key)
 	if err != nil {
 		fmt.Printf("Error hashing password : %s", err)
 	}
@@ -37,5 +38,13 @@ func main() {
 		fmt.Printf("Error decrypting  : %s\n", err)
 	}
 	fmt.Printf("Decrypted password : %s", plaintext)
+
+	//authentication
+	auth := encrypt.VerifyPassword(key, masterPassword)
+	if auth == nil {
+		fmt.Println("You are successfuly authenticated")
+	} else {
+		fmt.Println("Wrong credentials")
+	}
 
 }
