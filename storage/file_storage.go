@@ -5,7 +5,6 @@ package storage
 // JSON format is prefered for further use of Querying
 import (
 	"fmt"
-	"pass-manager/pass-manager/encrypt"
 	"pass-manager/pass-manager/structs"
 	"pass-manager/pass-manager/utils"
 )
@@ -26,11 +25,8 @@ func StorePassword(data structs.PasswordData, key []byte) error {
 		fmt.Println("misy olana", err)
 		return err
 	}
-	encrypted, err := encrypt.Encrypt(key, storageValue)
-	if err != nil {
-		return err
-	}
-	err = utils.Write("pass.txt", encrypted)
+
+	err = utils.EncryptWrite("pass.txt", storageValue, key)
 	if err != nil {
 		return err
 	}
@@ -38,29 +34,29 @@ func StorePassword(data structs.PasswordData, key []byte) error {
 	return nil
 }
 
-// Read File content
-// Decrypt the content to get JSON FORMAT
-// Convert JSON to PasswordStorage
-// return
+// Convert the fileContents in JSON format to PasswordStorage
 func LoadPassword(key []byte) (structs.PasswordStorage, error) {
 	var passwords structs.PasswordStorage
 
-	fileContents, err := utils.Read("pass.txt")
-	if err != nil {
-		return structs.PasswordStorage{}, err
-	}
-
-	json, err := encrypt.Decrypt(fileContents, key)
+	json, err := utils.ReadDecrypt("pass.txt", key)
 	if err != nil {
 		fmt.Println("misy olana", err)
 		return structs.PasswordStorage{}, err
 	}
 
 	err = utils.FromJson(json, &passwords)
-
 	if err != nil {
 		fmt.Println("Error loading", err)
 	}
 
 	return passwords, nil
+}
+
+// get the password by name in datasource
+// datasource should be retrieved beforehand
+func FindByName(datasource structs.PasswordStorage, name string) structs.PasswordData {
+	filterName := func(pass structs.PasswordData) bool { return pass.Name == name }
+	filtered := utils.Filter(datasource.Data, filterName)
+
+	return filtered[0] //TODO shoud be refactored || name is unique
 }
