@@ -15,10 +15,16 @@ func TestFindByName(t *testing.T) {
 	}
 
 	// when retrieving googlepass
-	googlepass := FindByName(passwords, "googlepass")
+	googlepass, _ := FindByName(passwords, "googlepass")
 
 	if googlepass.Name != "googlepass" {
 		t.Errorf("Should get googlepass")
+	}
+
+	// when retrieving non existing password
+	_, err := FindByName(passwords, "nopass")
+	if err == nil {
+		t.Errorf("Shoud get error loading non existing password")
 	}
 
 }

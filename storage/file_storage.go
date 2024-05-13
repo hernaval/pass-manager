@@ -54,9 +54,12 @@ func LoadPassword(key []byte) (structs.PasswordStorage, error) {
 
 // get the password by name in datasource
 // datasource should be retrieved beforehand
-func FindByName(datasource structs.PasswordStorage, name string) structs.PasswordData {
+func FindByName(datasource structs.PasswordStorage, name string) (structs.PasswordData, error) {
 	filterName := func(pass structs.PasswordData) bool { return pass.Name == name }
 	filtered := utils.Filter(datasource.Data, filterName)
+	if len(filtered) == 0 {
+		return structs.PasswordData{}, fmt.Errorf("no password found with name %s", name)
+	}
 
-	return filtered[0] //TODO shoud be refactored || name is unique
+	return filtered[0], nil //TODO shoud be refactored || name is unique
 }
