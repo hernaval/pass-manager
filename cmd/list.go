@@ -6,16 +6,23 @@ package cmd
 import (
 	"fmt"
 	"pass-manager/pass-manager/feature"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
+
+// list of available flag of this command
+var show bool
 
 // listCmd represents the list command
 // TODO flag for showing specified field
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all password",
-	Long:  `List all password and display all info about it, including decrypted password and name`,
+	Long: `List all password and display all info about it, by default password text is hidden. 
+	To show password use --show -s flag. 
+	Example list -show
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		data, err := feature.List()
 		if err != nil {
@@ -23,7 +30,11 @@ var listCmd = &cobra.Command{
 		}
 		fmt.Println("ID		NAME	PASSWORD")
 		for _, password := range data.Data {
-			fmt.Printf("%d ----------> %s -----------> %s", password.Id, password.Name, password.Ciphertext)
+			textPas := password.Ciphertext
+			if !show {
+				textPas = strings.Repeat("*", 7)
+			}
+			fmt.Printf("%d ----------> %s -----------> %s", password.Id, password.Name, textPas)
 			fmt.Println()
 		}
 
@@ -34,6 +45,7 @@ func init() {
 	rootCmd.AddCommand(listCmd)
 
 	// Here you will define your flags and configuration settings.
+	listCmd.Flags().BoolVarP(&show, "show", "s", false, "Show password as plaintext")
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:

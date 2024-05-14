@@ -12,7 +12,7 @@ import (
 )
 
 // getCmd represents the get command
-// TODO flag to display the decrypted pass
+// TODO flag to display the encrypted pass
 var getCmd = &cobra.Command{
 	Use:   "get [name]",
 	Short: "Get password by name",
