@@ -26,7 +26,7 @@ func StorePassword(data structs.PasswordData, key []byte) error {
 		return err
 	}
 
-	err = utils.EncryptWrite("pass.txt", storageValue, key)
+	err = utils.EncryptWrite("passdb.txt", storageValue, key)
 	if err != nil {
 		return err
 	}
@@ -38,7 +38,7 @@ func StorePassword(data structs.PasswordData, key []byte) error {
 func LoadPassword(key []byte) (structs.PasswordStorage, error) {
 	var passwords structs.PasswordStorage
 
-	json, err := utils.ReadDecrypt("pass.txt", key)
+	json, err := utils.ReadDecrypt("passdb.txt", key)
 	if err != nil {
 		fmt.Println("misy olana", err)
 		return structs.PasswordStorage{}, err

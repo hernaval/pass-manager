@@ -4,12 +4,14 @@ This is a sample go app for password manager (encryption/decryption)
 ## Todo
 [x] Search password by name
 
-[ ] Add more metadata for password data
+[ ] Init a storage
 
-[] Scan password (expiration, strength)
+[ ] Multiple config | switch config
 
-[ ] Encrypt the password itself
+[ ] Beautify CLI
 
 [ ] Authentication and Session for Master password
 
-[ ] Create CLI
+[ ] Add more metadata for password data
+
+[] Scan password (expiration, strength)
