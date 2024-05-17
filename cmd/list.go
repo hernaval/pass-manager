@@ -21,12 +21,12 @@ var listCmd = &cobra.Command{
 	Short: "List all password",
 	Long: `List all password and display all info about it, by default password text is hidden. 
 	To show password use --show -s flag. 
-	Example list -show
+	Example list --show
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		data, err := feature.List()
 		if err != nil {
-			fmt.Errorf("error loading password %s", err)
+			fmt.Printf("error loading password %s", err)
 		}
 		fmt.Println("ID		NAME	PASSWORD")
 		for _, password := range data.Data {
@@ -37,7 +37,6 @@ var listCmd = &cobra.Command{
 			fmt.Printf("%d ----------> %s -----------> %s", password.Id, password.Name, textPas)
 			fmt.Println()
 		}
-
 	},
 }
 
