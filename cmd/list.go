@@ -5,6 +5,8 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"pass-manager/pass-manager/encrypt"
 	"pass-manager/pass-manager/feature"
 	"strings"
 
@@ -24,9 +26,11 @@ var listCmd = &cobra.Command{
 	Example list --show
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		data, err := feature.List()
+		key := encrypt.EncKey([]byte(masterPassword))
+		data, err := feature.List(key)
 		if err != nil {
 			fmt.Printf("error loading password %s", err)
+			os.Exit(1)
 		}
 		fmt.Println("ID		NAME	PASSWORD")
 		for _, password := range data.Data {

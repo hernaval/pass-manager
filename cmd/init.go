@@ -14,13 +14,12 @@ import (
 )
 
 const (
-	fileConfigExt = "*.go"
+	fileConfigExt = "*.yaml"
 	storageName   = "passdb.txt"
 )
 
 // flags variable
 var filename string
-var masterPassword string
 
 // initCmd represents the init command
 
@@ -98,7 +97,6 @@ func init() {
 
 	// Here you will define your flags and configuration settings.
 	initCmd.Flags().StringVarP(&filename, "filename", "f", "pass-manager.yaml", "Name of the config file")
-	initCmd.Flags().StringVarP(&masterPassword, "password", "p", "", "The master password for encryption mechanism")
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// initCmd.PersistentFlags().String("foo", "", "A help for foo")

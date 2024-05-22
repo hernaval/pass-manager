@@ -6,6 +6,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"pass-manager/pass-manager/encrypt"
 	"pass-manager/pass-manager/feature"
 	"pass-manager/pass-manager/structs"
 
@@ -22,7 +23,8 @@ var addCmd = &cobra.Command{
 	`,
 	Args: cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		_, err := feature.AddPassword(structs.PasswordData{Id: 1, Name: args[0], Ciphertext: args[1]})
+		key := encrypt.EncKey([]byte(masterPassword))
+		_, err := feature.AddPassword(structs.PasswordData{Id: 1, Name: args[0], Ciphertext: args[1]}, key)
 		if err != nil {
 			fmt.Printf("error while adding a new password %s", err)
 			os.Exit(1)

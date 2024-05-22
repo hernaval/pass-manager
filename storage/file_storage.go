@@ -16,13 +16,13 @@ import (
 func StorePassword(data structs.PasswordData, key []byte) error {
 	passwords, err := LoadPassword(key)
 	if err != nil {
-		fmt.Println("misy olana", err)
+		fmt.Println("storage error ", err)
 		return err
 	}
 	passwords.Data = append(passwords.Data, data)
 	storageValue, err := utils.ToJson(passwords)
 	if err != nil {
-		fmt.Println("misy olana", err)
+		fmt.Println("storage error ", err)
 		return err
 	}
 
@@ -40,7 +40,7 @@ func LoadPassword(key []byte) (structs.PasswordStorage, error) {
 
 	json, err := utils.ReadDecrypt("passdb.txt", key)
 	if err != nil {
-		fmt.Println("misy olana", err)
+		fmt.Println("storage error ", err)
 		return structs.PasswordStorage{}, err
 	}
 

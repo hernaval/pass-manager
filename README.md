@@ -15,3 +15,13 @@ This is a sample go app for password manager (encryption/decryption)
 [ ] Add more metadata for password data
 
 [] Scan password (expiration, strength)
+
+## ALPHA RELEASE
+### Refactoring 
+[ ] Better error handling: user error not technical error
+[ ] Init and feature
+
+### Documentation
+[ ] Readme
+[ ] How it works (with command explaination)
+[ ] Encryption mechanism

@@ -12,6 +12,7 @@ import (
 )
 
 var cfgFile string
+var masterPassword string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -39,6 +40,7 @@ func init() {
 
 	// define global flags accessible everywhere
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.pass-manager.yaml)")
+	rootCmd.PersistentFlags().StringVarP(&masterPassword, "password", "p", "", "The master password for encryption mechanism")
 }
 
 // initConfig reads in config file and ENV variables if set.

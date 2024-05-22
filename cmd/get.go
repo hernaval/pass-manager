@@ -6,6 +6,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"pass-manager/pass-manager/encrypt"
 	"pass-manager/pass-manager/feature"
 
 	"github.com/spf13/cobra"
@@ -22,8 +23,9 @@ var getCmd = &cobra.Command{
 	`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		key := encrypt.EncKey([]byte(masterPassword))
 		name := args[0]
-		password, err := feature.GetByName(name)
+		password, err := feature.GetByName(name, key)
 		if err != nil {
 			fmt.Printf("error getting password: %s", err)
 			os.Exit(1)

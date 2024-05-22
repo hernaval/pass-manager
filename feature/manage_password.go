@@ -1,18 +1,11 @@
 package feature
 
 import (
-	"pass-manager/pass-manager/encrypt"
 	"pass-manager/pass-manager/storage"
 	"pass-manager/pass-manager/structs"
 )
 
-func AddPassword(passData structs.PasswordData) (structs.PasswordData, error) {
-	//create a master password
-	masterPassword := "adminadmin"
-
-	//create KDF key for the master password
-	key := encrypt.EncKey([]byte(masterPassword))
-
+func AddPassword(passData structs.PasswordData, key []byte) (structs.PasswordData, error) {
 	// save
 	err := storage.StorePassword(passData, key)
 	if err != nil {
@@ -22,13 +15,7 @@ func AddPassword(passData structs.PasswordData) (structs.PasswordData, error) {
 	return passData, err
 }
 
-func GetByName(name string) (structs.PasswordData, error) {
-	//create a master password
-	masterPassword := "adminadmin"
-
-	//create KDF key for the master password
-	key := encrypt.EncKey([]byte(masterPassword))
-
+func GetByName(name string, key []byte) (structs.PasswordData, error) {
 	// retrieve password list (datasource)
 	datasource, err := storage.LoadPassword(key)
 	if err != nil {
@@ -43,13 +30,7 @@ func GetByName(name string) (structs.PasswordData, error) {
 	return password, nil
 }
 
-func List() (structs.PasswordStorage, error) {
-	//create a master password
-	masterPassword := "adminadmin"
-
-	//create KDF key for the master password
-	key := encrypt.EncKey([]byte(masterPassword))
-
+func List(key []byte) (structs.PasswordStorage, error) {
 	// retrieve password list (datasource)
 	passwords, err := storage.LoadPassword(key)
 	if err != nil {
