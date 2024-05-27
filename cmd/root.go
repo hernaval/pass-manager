@@ -14,7 +14,6 @@ import (
 var cfgFile string
 var masterPassword string
 
-// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "pass-manager",
 	Short: "A brief description of your application",
@@ -26,8 +25,6 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
@@ -39,7 +36,6 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	// define global flags accessible everywhere
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.pass-manager.yaml)")
 	rootCmd.PersistentFlags().StringVarP(&masterPassword, "password", "p", "", "The master password for encryption mechanism")
 }
 

@@ -22,6 +22,9 @@ var addCmd = &cobra.Command{
 	want to use it.
 	`,
 	Args: cobra.ExactArgs(2),
+	PreRun: func(cmd *cobra.Command, args []string) {
+		CheckInitialized()
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		key := encrypt.EncKey([]byte(masterPassword))
 		_, err := feature.AddPassword(structs.PasswordData{Id: 1, Name: args[0], Ciphertext: args[1]}, key)

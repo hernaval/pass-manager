@@ -5,10 +5,15 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"crypto/sha256"
+	"errors"
 	"fmt"
 	"io"
 
 	"golang.org/x/crypto/bcrypt"
+)
+
+var (
+	ErrAuthentication = errors.New("authentication error")
 )
 
 // ensuring the encription key is 32-bit size supported by aes256
@@ -78,8 +83,8 @@ func Decrypt(ciphertext []byte, key []byte) ([]byte, error) {
 	nonce, ciphertext := ciphertext[:nonceSize], ciphertext[nonceSize:]
 	plaintext, err := gcm.Open(nil, nonce, ciphertext, nil)
 	if err != nil {
-		fmt.Println("error after open")
-		return nil, err
+
+		return nil, ErrAuthentication
 	}
 	return plaintext, nil
 }

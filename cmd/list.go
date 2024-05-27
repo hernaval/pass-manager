@@ -25,13 +25,23 @@ var listCmd = &cobra.Command{
 	To show password use --show -s flag. 
 	Example list --show
 	`,
+	PreRun: func(cmd *cobra.Command, args []string) {
+		CheckInitialized()
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		key := encrypt.EncKey([]byte(masterPassword))
 		data, err := feature.List(key)
 		if err != nil {
-			fmt.Printf("error loading password %s", err)
+			switch err {
+			case encrypt.ErrAuthentication:
+				fmt.Println("Unauthorized: missing or wrong password provided.")
+
+			default:
+				fmt.Printf("error loading password %s", err)
+			}
 			os.Exit(1)
 		}
+
 		fmt.Println("ID		NAME	PASSWORD")
 		for _, password := range data.Data {
 			textPas := password.Ciphertext
@@ -47,14 +57,6 @@ var listCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(listCmd)
 
-	// Here you will define your flags and configuration settings.
+	// flags
 	listCmd.Flags().BoolVarP(&show, "show", "s", false, "Show password as plaintext")
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// listCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

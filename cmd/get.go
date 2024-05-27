@@ -12,8 +12,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// getCmd represents the get command
-// TODO flag to display the encrypted pass
+var copy bool
+
 var getCmd = &cobra.Command{
 	Use:   "get [name]",
 	Short: "Get password by name",
@@ -22,14 +22,24 @@ var getCmd = &cobra.Command{
 	Example usage : get googlepass
 	`,
 	Args: cobra.ExactArgs(1),
+	PreRun: func(cmd *cobra.Command, args []string) {
+		CheckInitialized()
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		key := encrypt.EncKey([]byte(masterPassword))
 		name := args[0]
 		password, err := feature.GetByName(name, key)
 		if err != nil {
-			fmt.Printf("error getting password: %s", err)
+			switch err {
+			case encrypt.ErrAuthentication:
+				fmt.Println("Unauthorized: missing or wrong password provided.")
+
+			default:
+				fmt.Printf("Error get password")
+			}
 			os.Exit(1)
 		}
+
 		fmt.Printf(password.Ciphertext)
 
 	},
@@ -38,13 +48,5 @@ var getCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(getCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// getCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// getCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	getCmd.Flags().BoolVarP(&copy, "copy", "c", false, "Copy password to clipboard")
 }
