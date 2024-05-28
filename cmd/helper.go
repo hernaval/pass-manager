@@ -12,8 +12,9 @@ type Step int
 const (
 	fileConfigExt    = "*.yaml"
 	databaseFilegExt = "*.psm"
-	// storageName   = "passdb.psm"
 )
+
+// Initialization steps
 const (
 	DoConfigFile Step = iota
 	DoDatabasee

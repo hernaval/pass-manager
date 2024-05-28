@@ -36,6 +36,14 @@ var initCmd = &cobra.Command{
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// var storageConf map[string]any
+		fmt.Println(
+			`
+|  _ \  / ___|   |  \/  |
+| |_) | \___ \   | |\/| |
+|  __/   ___) |  | |  | |
+|_|     |____/   |_|  |_|
+v2024.0.0.1-alpha
+		`)
 		var msg string
 		if filename == "" || masterPassword == "" {
 			fmt.Println("Filename and master password are required")
