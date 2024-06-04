@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/elewis787/boa"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -26,6 +27,9 @@ to quickly create a Cobra application.`,
 }
 
 func Execute() {
+	rootCmd.SetUsageFunc(boa.UsageFunc)
+	rootCmd.SetHelpFunc(boa.HelpFunc)
+
 	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)

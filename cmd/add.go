@@ -21,12 +21,21 @@ var addCmd = &cobra.Command{
 	using this command. Give a significant name to get it seamlessly next time you
 	want to use it.
 	`,
-	Args: cobra.ExactArgs(2),
+	Args: cobra.RangeArgs(0, 3),
+
 	PreRun: func(cmd *cobra.Command, args []string) {
 		CheckInitialized()
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		key := encrypt.EncKey([]byte(masterPassword))
+		// q := []tui.Question{tui.NewQuestion("Enter a name", ""), tui.NewQuestion("Enter a password", "test")}
+		// container := tui.New(q)
+
+		// p := tea.NewProgram(*container)
+		// if _, err := p.Run(); err != nil {
+		// 	log.Fatal(err)
+		// }
+
 		_, err := feature.AddPassword(structs.PasswordData{Id: 1, Name: args[0], Ciphertext: args[1]}, key)
 		if err != nil {
 			fmt.Printf("error while adding a new password %s", err)
