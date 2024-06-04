@@ -1,1 +1,3 @@
-pass.txt
+*.psm
+*.exe
+*-manager.yaml

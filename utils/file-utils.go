@@ -1,8 +1,10 @@
 package utils
 
 import (
+	"io/fs"
 	"os"
 	"pass-manager/pass-manager/encrypt"
+	"path/filepath"
 )
 
 // read the whole file contents
@@ -50,4 +52,47 @@ func EncryptWrite(filepath string, values []byte, key []byte) error {
 		return err
 	}
 	return nil
+}
+
+// Get a root path as input
+// Loop the children of the root
+// Find all file matching the pattern (use shell based file pattern)
+func FindFilesMatch(pattern string, root string) ([]string, error) {
+	var files []string
+	err := filepath.Walk(root, func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			return nil
+		}
+		if matched, err := filepath.Match(pattern, filepath.Base(path)); err != nil {
+			return err
+		} else if matched {
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return files, nil
+}
+
+func CreateNewFile(filename string) error {
+	dir, _ := os.Getwd()
+	separator := string(os.PathSeparator)
+	_, err := os.Create(dir + separator + filename)
+
+	return err
+}
+
+func CurrentDir() string {
+	dir, _ := os.Getwd()
+
+	return dir
+}
+
+func Separator() string {
+	return string(os.PathSeparator)
 }

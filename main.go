@@ -1,9 +1,11 @@
+/*
+Copyright © 2024 Ranarivola Herinavalona hernavalasco@gmail.com
+
+*/
 package main
 
-import (
-	"fmt"
-)
+import "pass-manager/pass-manager/cmd"
 
 func main() {
-	fmt.Println("PASS MANAGER")
+	cmd.Execute()
 }
